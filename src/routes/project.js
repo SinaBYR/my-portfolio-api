@@ -18,6 +18,7 @@ const upload = multer({
 })
 
 router.post('/projects', upload.single('preview'), (req, res) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:3000')
     // try {
     //     const project = new Project(req.body)
     // } catch(err) {
