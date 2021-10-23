@@ -2,10 +2,9 @@ const express = require('express')
 const multer = require('multer')
 const router = new express.Router()
 const Project = require('../models/project')
+const cors = require('cors')
 
-router.get('/projects', (req, res) => {
-
-})
+router.use(cors())
 
 const upload = multer({
     fileFilter(req, file, cb) {
@@ -17,17 +16,19 @@ const upload = multer({
     }
 })
 
-router.post('/projects', upload.single('preview'), (req, res) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:3000')
-    // try {
-    //     const project = new Project(req.body)
-    // } catch(err) {
-
-    // }
-    res.send({
-        body: req.body,
-        file: req.file.buffer
-    })
+router.post('/projects', upload.single('preview'), async (req, res) => {
+    const document = {
+        ...req.body,
+        preview: req.file.buffer
+    }
+    const project = new Project(document)
+    try {
+        await project.save()
+        res.status(201).send(document)
+    } catch(err) {
+        console.log(err)
+        res.status(500).send()
+    }
 })
 
 module.exports = router
