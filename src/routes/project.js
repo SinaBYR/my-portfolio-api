@@ -47,4 +47,18 @@ router.get('/projects', async (req, res) => {
     }
 })
 
+// GET /projects/:id
+router.get('/projects/:id', async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id)
+        if(!project) {
+            return res.status(404).send()
+        }
+
+        res.send(project)
+    } catch(err) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
