@@ -31,4 +31,20 @@ router.post('/projects', upload.single('preview'), async (req, res) => {
     }
 })
 
+// GET /projects?titleOnly=true : returns only titles of projects
+router.get('/projects', async (req, res) => {
+    const selectOptions = {}
+
+    if(req.query.titleOnly) {
+        selectOptions.title = 1
+    }
+
+    try {
+        const projects = await Project.find({}).select(selectOptions)
+        res.send(projects)
+    } catch(err) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
