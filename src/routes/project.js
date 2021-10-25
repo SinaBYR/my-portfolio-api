@@ -68,8 +68,6 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
     const updates = Object.keys(req.body)
     const isUpdateValid = updates.every(update => allowedUpdates.includes(update))
 
-    console.log(isUpdateValid)
-
     if(!isUpdateValid) {
         return res.status(400).send({error: 'Invalid updates'})
     }
@@ -83,6 +81,7 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
         updates.forEach(update => {
             project[update] = req.body[update]
         })
+        // update preview if only preview file was updated
         if(req.file) {
             project.preview = req.file.buffer
         }
