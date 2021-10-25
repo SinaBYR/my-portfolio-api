@@ -16,6 +16,7 @@ const upload = multer({
     }
 })
 
+// POST /projects
 router.post('/projects', upload.single('preview'), async (req, res) => {
     const document = {
         ...req.body,
@@ -55,6 +56,38 @@ router.get('/projects/:id', async (req, res) => {
             return res.status(404).send()
         }
 
+        res.send(project)
+    } catch(err) {
+        res.status(500).send()
+    }
+})
+
+// PATCH /projects/:id
+router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
+    const allowedUpdates = ['title', 'description', 'demo', 'code', 'tech']
+    const updates = Object.keys(req.body)
+    const isUpdateValid = updates.every(update => allowedUpdates.includes(update))
+
+    console.log(isUpdateValid)
+
+    if(!isUpdateValid) {
+        return res.status(400).send({error: 'Invalid updates'})
+    }
+
+    try {
+        const project = await Project.findById(req.params.id)
+        if(!project) {
+            return res.status(404).send()
+        }
+        
+        updates.forEach(update => {
+            project[update] = req.body[update]
+        })
+        if(req.file) {
+            project.preview = req.file.buffer
+        }
+        
+        await project.save()
         res.send(project)
     } catch(err) {
         res.status(500).send()
