@@ -31,6 +31,16 @@ const projectSchema = new mongoose.Schema({
     }
 })
 
+projectSchema.methods.toJSON = function() {
+    const project = this
+    const projectPlainObject = project.toObject()
+
+    delete projectPlainObject.preview
+    delete projectPlainObject.__v
+
+    return projectPlainObject
+}
+
 const Project = mongoose.model('Project', projectSchema)
 
 module.exports = Project
