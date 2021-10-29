@@ -3,6 +3,7 @@ const multer = require('multer')
 const router = new express.Router()
 const Project = require('../models/project')
 const cors = require('cors')
+const sharp = require('sharp')
 
 router.use(cors())
 
@@ -18,6 +19,7 @@ const upload = multer({
 
 // POST /projects
 router.post('/projects', upload.single('preview'), async (req, res) => {
+    const buffer = sharp(req.file?.buffer).png().toBuffer()
     const document = {
         ...req.body,
         preview: req.file?.buffer
@@ -25,7 +27,7 @@ router.post('/projects', upload.single('preview'), async (req, res) => {
     const project = new Project(document)
     try {
         await project.save()
-        res.status(201).send(document)
+        res.status(201).send(project)
     } catch(err) {
         console.log(err)
         res.status(500).send()
@@ -57,6 +59,20 @@ router.get('/projects/:id', async (req, res) => {
         }
 
         res.send(project)
+    } catch(err) {
+        res.status(500).send()
+    }
+})
+
+router.get('/projects/preview/:id', async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id)
+        if(!project) {
+            return res.status(404).send()
+        }
+
+        res.set('Content-Type', 'image/png')
+        res.send(project.preview)
     } catch(err) {
         res.status(500).send()
     }
