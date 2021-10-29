@@ -31,12 +31,13 @@ const projectSchema = new mongoose.Schema({
     }
 })
 
+// Customize project object before returning
 projectSchema.methods.toJSON = function() {
     const project = this
     const projectPlainObject = project.toObject()
 
-    delete projectPlainObject.preview
     delete projectPlainObject.__v
+    projectPlainObject.preview = 'http://localhost:8000/projects/preview/' + projectPlainObject._id
 
     return projectPlainObject
 }

@@ -22,12 +22,13 @@ router.post('/projects', upload.single('preview'), async (req, res) => {
     const buffer = sharp(req.file?.buffer).png().toBuffer()
     const document = {
         ...req.body,
-        preview: req.file?.buffer
+        preview: buffer
     }
     const project = new Project(document)
     try {
         await project.save()
         res.status(201).send(project)
+
     } catch(err) {
         console.log(err)
         res.status(500).send()
@@ -50,7 +51,6 @@ router.get('/projects', async (req, res) => {
     }
 })
 
-// GET /projects/:id
 router.get('/projects/:id', async (req, res) => {
     try {
         const project = await Project.findById(req.params.id)
@@ -78,13 +78,10 @@ router.get('/projects/preview/:id', async (req, res) => {
     }
 })
 
-// PATCH /projects/:id
 router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
     const allowedUpdates = ['title', 'description', 'demo', 'code', 'tech']
     const updates = Object.keys(req.body)
     const isUpdateValid = updates.every(update => allowedUpdates.includes(update))
-
-    console.log(req.file)
 
     if(!isUpdateValid) {
         return res.status(400).send({error: 'Invalid updates'})
@@ -101,7 +98,8 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
         })
         // update preview if only preview file was updated
         if(req.file) {
-            project.preview = req.file.buffer
+            const buffer = sharp(req.file.buffer).png().toBuffer()
+            project.preview = buffer
         }
         
         await project.save()
