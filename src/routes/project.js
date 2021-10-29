@@ -20,7 +20,7 @@ const upload = multer({
 router.post('/projects', upload.single('preview'), async (req, res) => {
     const document = {
         ...req.body,
-        preview: req.file.buffer
+        preview: req.file?.buffer
     }
     const project = new Project(document)
     try {
@@ -67,6 +67,8 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
     const allowedUpdates = ['title', 'description', 'demo', 'code', 'tech']
     const updates = Object.keys(req.body)
     const isUpdateValid = updates.every(update => allowedUpdates.includes(update))
+
+    console.log(req.file)
 
     if(!isUpdateValid) {
         return res.status(400).send({error: 'Invalid updates'})
