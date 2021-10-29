@@ -19,7 +19,7 @@ const upload = multer({
 
 // POST /projects
 router.post('/projects', upload.single('preview'), async (req, res) => {
-    const buffer = sharp(req.file?.buffer).png().toBuffer()
+    const buffer = await sharp(req.file?.buffer).png().toBuffer()
     const document = {
         ...req.body,
         preview: buffer
@@ -98,7 +98,7 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
         })
         // update preview if only preview file was updated
         if(req.file) {
-            const buffer = sharp(req.file.buffer).png().toBuffer()
+            const buffer = await sharp(req.file.buffer).png().toBuffer()
             project.preview = buffer
         }
         
