@@ -109,4 +109,18 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
     }
 })
 
+router.delete('/projects/:id', async (req, res) => {
+    const _id = req.params.id
+    try {
+        const project = await Project.findByIdAndDelete({_id})
+        if(!project) {
+            return res.status(404).send()
+        }
+        
+        res.send(project)
+    } catch(err) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
