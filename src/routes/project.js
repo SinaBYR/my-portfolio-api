@@ -9,7 +9,7 @@ router.use(cors())
 
 const upload = multer({
     fileFilter(req, file, cb) {
-        if(!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+        if(!file.originalname.toLowerCase().match(/\.(png|jpg|jpeg)$/)) {
             return cb(new Error('File must be an image.'))
         }
 
