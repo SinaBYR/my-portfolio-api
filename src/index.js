@@ -1,5 +1,5 @@
 const express = require('express')
-const projectsRouter = require('./routes/project')
+// const projectsRouter = require('./routes/project')
 const cors = require('cors')
 require('dotenv').config({ path: './config/.env' })
 
