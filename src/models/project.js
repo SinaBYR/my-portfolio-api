@@ -37,7 +37,7 @@ projectSchema.methods.toJSON = function() {
     const projectPlainObject = project.toObject()
 
     delete projectPlainObject.__v
-    projectPlainObject.preview = 'http://localhost:8000/projects/preview/' + projectPlainObject._id
+    projectPlainObject.preview = 'https://sina-beyraghdar-portfolio-api.herokuapp.com/projects/preview/' + projectPlainObject._id
 
     return projectPlainObject
 }
