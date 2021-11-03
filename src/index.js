@@ -1,12 +1,13 @@
 const express = require('express')
 const projectsRouter = require('./routes/project')
 const cors = require('cors')
+require('dotenv').config({ path: './config/.env' })
 
 // for running mongoose server
 require('./db/mongoose')
 
 const app = express()
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 
 app.use(express.json())
 app.use(projectsRouter)
