@@ -19,7 +19,7 @@ const upload = multer({
 
 // POST /projects
 router.post('/projects', upload.single('preview'), async (req, res) => {
-    const buffer = await sharp(req.file?.buffer).png().toBuffer()
+    const buffer = await sharp(req.file?.buffer).webp().toBuffer()
     const document = {
         ...req.body,
         preview: buffer
