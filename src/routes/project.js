@@ -98,7 +98,7 @@ router.patch('/projects/:id', upload.single('preview'), async (req, res) => {
         })
         // update preview if only preview file was updated
         if(req.file) {
-            const buffer = await sharp(req.file.buffer).png().toBuffer()
+            const buffer = await sharp(req.file.buffer).webp().toBuffer()
             project.preview = buffer
         }
         
