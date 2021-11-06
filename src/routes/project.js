@@ -71,7 +71,7 @@ router.get('/projects/preview/:id', async (req, res) => {
             return res.status(404).send()
         }
 
-        res.set('Content-Type', 'image/png')
+        res.set('Content-Type', 'image/webp')
         res.send(project.preview)
     } catch(err) {
         res.status(500).send()
